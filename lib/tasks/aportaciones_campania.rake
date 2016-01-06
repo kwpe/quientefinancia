@@ -1,11 +1,9 @@
 namespace :aportaciones_campania do
+  URL = 'https://www.web.onpe.gob.pe/servicios/financiamiento-organizaciones-politicas/aportes-limpios/'
+
   task extraer: :environment do
     include Capybara::DSL
-    url = 'https://www.web.onpe.gob.pe/servicios/financiamiento-organizaciones-politicas/aportes-limpios/'
-    visit url
-    find('#cboTipo').select('PARTIDO POLITICO')
-    find('#cboOrga').select('TODOS POR EL PERÚ')
-    click_on('BUSCAR')
+    carga_partido 'TODOS POR EL PERÚ'
     within('#accordion') do
       find("[href='#collapse0']").click
       tabla_periodos = find('table tbody')
@@ -27,5 +25,12 @@ namespace :aportaciones_campania do
       aporte_especies: celdas[2].text.strip,
       total: celdas[3].text.strip
     )
+  end
+
+  def carga_partido(partido)
+    visit URL
+    find('#cboTipo').select('PARTIDO POLITICO')
+    find('#cboOrga').select(partido)
+    click_on('BUSCAR')
   end
 end

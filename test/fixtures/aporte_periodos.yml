@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  tipo_doc: MyString
+  nrodoc: MyString
+  importe: 9.99
+  periodo: 
+
+two:
+  nombre: MyString
+  tipo_doc: MyString
+  nrodoc: MyString
+  importe: 9.99
+  periodo: 

@@ -1,6 +1,6 @@
 class CreateAportePeriodos < ActiveRecord::Migration[5.0]
   def change
-    create_table :aporte_periodos do |t|
+    create_table :aportes_periodo do |t|
       t.string :nombre
       t.string :tipo_doc
       t.string :nrodoc

@@ -5,7 +5,7 @@
 # locales as you wish. All of these examples are active by default:
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.plural(/a$/i, '\1as')
-  inflect.irregular 'aporte_periodo', 'aportes_por_periodo'
+  inflect.irregular 'aporte_periodo', 'aportes_periodo'
 end
 
 # These inflection rules are supported but not enabled by default:

@@ -1,3 +1,3 @@
 class Periodo < ApplicationRecord
-  has_many :aportes_por_periodo
+  has_many :aportes_periodo
 end

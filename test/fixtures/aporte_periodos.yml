@@ -3,13 +3,13 @@
 one:
   nombre: MyString
   tipo_doc: MyString
-  nrodoc: MyString
+  nro_doc: MyString
   importe: 9.99
   periodo: 
 
 two:
   nombre: MyString
   tipo_doc: MyString
-  nrodoc: MyString
+  nro_doc: MyString
   importe: 9.99
   periodo: 

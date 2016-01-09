@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20160107003710) do
     t.string   "apellido_materno"
     t.string   "nombre"
     t.string   "tipo_doc"
-    t.string   "nrodoc"
+    t.string   "nro_doc"
     t.string   "tipo"
     t.string   "naturaleza"
     t.decimal  "importe"
@@ -31,11 +31,11 @@ ActiveRecord::Schema.define(version: 20160107003710) do
   create_table "aportes_periodo", force: :cascade do |t|
     t.string   "nombre"
     t.string   "tipo_doc"
-    t.string   "nrodoc"
-    t.decimal  "importe"
+    t.string   "nro_doc"
+    t.decimal  "importe",    precision: 12, scale: 2
     t.integer  "periodo_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   create_table "periodos", force: :cascade do |t|

@@ -7,7 +7,7 @@ class CreateAportes < ActiveRecord::Migration[5.0]
       t.string :apellido_materno
       t.string :nombre
       t.string :tipo_doc
-      t.string :nrodoc
+      t.string :nro_doc
       t.string :tipo
       t.string :naturaleza
       t.decimal :importe

@@ -9,3 +9,4 @@ end
 
 # Configure Capybara to use Poltergeist as the driver
 Capybara.default_driver = :poltergeist
+Capybara.default_max_wait_time = 5

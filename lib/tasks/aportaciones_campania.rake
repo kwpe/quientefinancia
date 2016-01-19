@@ -57,14 +57,14 @@ namespace :aportaciones_campania do
   def crear_aportes_periodo(aportes_con_subtotales)
     aportes = []
     aportes_con_subtotales.each_with_object([]) do |aporte, aportes_periodo|
-      if aporte.is_a?(Subtotal)
-        aportes_periodo << nuevo_aporte_del_periodo(aportes, txt_importe: aporte.txt_importe)
+      if aporte.is_a?(Subtotal) && !aportes.empty?
+        aportes_periodo << nuevo_aporte_del_periodo(aportes)
         aportes.clear
       elsif aportes.size > 0 && se_olvidaron_poner_subtotal?(aportes.last, aporte)
-        aportes_periodo << nuevo_aporte_del_periodo(aportes, txt_importe: aportes.map(&:importe).sum.to_s)
+        aportes_periodo << nuevo_aporte_del_periodo(aportes)
         aportes.clear
         aportes << aporte
-      else
+      elsif !aporte.is_a?(Subtotal)
         aportes << aporte
       end
     end
@@ -75,13 +75,10 @@ namespace :aportaciones_campania do
   end
 
   def acumula_aportes_de_pagina(filas)
-    aportess = filas.each_with_object([]) do |fila ,aportes|
+    filas.each_with_object([]) do |fila ,aportes|
       celdas = fila.all('td')
-      aporte = nuevo_aporte(celdas) unless ultima_fila?(celdas)
-      aportes << aporte
+      aportes << nuevo_aporte(celdas)
     end.compact
-
-    aportess
   end
 
   def fila_total?(celdas)
@@ -96,22 +93,23 @@ namespace :aportaciones_campania do
     celdas[0].text.strip == 'IMPORTE TOTAL DE PÁGINA' || fila_total?(celdas)
   end
 
-  def nuevo_aporte_del_periodo(aportes, txt_importe:)
+  def nuevo_aporte_del_periodo(aportes)
+    total_aportado = aportes.map(&:importe).sum
     p "Nro de aportess de #{aportes.first.nombre_completo}: #{aportes.size}"
     p "Aportes: #{aportes.map(&:campos_importantes)}"
-    p "TOTAL APORTADO: #{txt_importe}"
+    p "TOTAL APORTADO: #{total_aportado}"
     AportePeriodo.new(
       nombre: aportes.first.nombre,
       tipo_doc: aportes.first.tipo_doc,
       nro_doc: aportes.first.nro_doc,
-      importe: txt_importe.delete(','),
+      importe: total_aportado,
       aportes: aportes
     )
   end
 
   def nuevo_aporte(celdas)
-    return Subtotal.new(celdas[0].text.strip, celdas[1].text.strip) if fila_subtotal?(celdas)
-    Aporte.new(
+    return Subtotal.new(celdas[0].text.strip, celdas[1].text.strip) if fila_subtotal?(celdas) || ultima_fila?(celdas)
+    return Aporte.new(
       fecha: celdas[0].text.strip,
       proceso_electoral: celdas[1].text.strip,
       apellido_paterno: celdas[2].text.strip,
@@ -121,7 +119,19 @@ namespace :aportaciones_campania do
       nro_doc: celdas[6].text.strip,
       tipo: celdas[7].text.strip,
       naturaleza: celdas[8].text.strip,
-      importe: celdas[9].text.strip.delete(','),
+      importe: celdas[9].text.strip.delete(',')
+    ) if celdas.size == 10
+    Aporte.new(
+      fecha: celdas[0].text.strip,
+      proceso_electoral: celdas[1].text.strip,
+      apellido_paterno: celdas[2].text.strip,
+      apellido_materno: celdas[3].text.strip,
+      nombre: celdas[4].text.strip,
+      tipo_doc: celdas[4].text.strip,
+      nro_doc: celdas[4].text.strip,
+      tipo: celdas[5].text.strip,
+      naturaleza: celdas[6].text.strip,
+      importe: celdas[7].text.strip.delete(',')
     )
   end
 
